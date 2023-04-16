@@ -1,0 +1,10 @@
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.csproj.AssemblyReference.cache
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\spa.proxy.json
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.GeneratedMSBuildEditorConfig.editorconfig
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.AssemblyInfoInputs.cache
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.AssemblyInfo.cs
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.csproj.CoreCompileInputs.cache
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.MvcApplicationPartsAssemblyInfo.cs
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.MvcApplicationPartsAssemblyInfo.cache
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.RazorAssemblyInfo.cache
+D:\Proyecto\ProyectoGrado\obj\Debug\net7.0\ProyectoGrado.RazorAssemblyInfo.cs
