@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Proyecto\\ProyectoGrado\\ProyectoGrado.csproj": {}
+    "D:\\ProyectoGrado\\API-ProyectoGrado\\ProyectoGrado.csproj": {}
   },
   "projects": {
-    "D:\\Proyecto\\ProyectoGrado\\ProyectoGrado.csproj": {
+    "D:\\ProyectoGrado\\API-ProyectoGrado\\ProyectoGrado.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Proyecto\\ProyectoGrado\\ProyectoGrado.csproj",
+        "projectUniqueName": "D:\\ProyectoGrado\\API-ProyectoGrado\\ProyectoGrado.csproj",
         "projectName": "ProyectoGrado",
-        "projectPath": "D:\\Proyecto\\ProyectoGrado\\ProyectoGrado.csproj",
+        "projectPath": "D:\\ProyectoGrado\\API-ProyectoGrado\\ProyectoGrado.csproj",
         "packagesPath": "C:\\Users\\pepix\\.nuget\\packages\\",
-        "outputPath": "D:\\Proyecto\\ProyectoGrado\\obj\\",
+        "outputPath": "D:\\ProyectoGrado\\API-ProyectoGrado\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pepix\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Backblaze.Agent": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "Microsoft.AspNetCore.ApiAuthorization.IdentityServer": {
               "target": "Package",
               "version": "[7.0.3, )"

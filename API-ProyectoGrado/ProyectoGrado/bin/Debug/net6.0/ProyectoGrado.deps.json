@@ -8,6 +8,10 @@
     ".NETCoreApp,Version=v6.0": {
       "ProyectoGrado/1.0.0": {
         "dependencies": {
+          "AWSSDK.Extensions.NETCore.Setup": "3.7.6",
+          "AWSSDK.S3": "3.7.104.6",
+          "Backblaze.Agent": "1.0.1",
+          "Backblaze.Client": "1.0.1",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "6.0.4",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.15",
           "Microsoft.AspNetCore.Identity.UI": "6.0.15",
@@ -19,6 +23,39 @@
         },
         "runtime": {
           "ProyectoGrado.dll": {}
+        }
+      },
+      "AWSSDK.Core/3.7.106.28": {
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.Core.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.106.28"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/3.7.6": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.106.28",
+          "Microsoft.Extensions.Configuration.Abstractions": "7.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.6.0"
+          }
+        }
+      },
+      "AWSSDK.S3/3.7.104.6": {
+        "dependencies": {
+          "AWSSDK.Core": "3.7.106.28"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/AWSSDK.S3.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.104.6"
+          }
         }
       },
       "Azure.Core/1.24.0": {
@@ -52,6 +89,32 @@
           "lib/netstandard2.0/Azure.Identity.dll": {
             "assemblyVersion": "1.6.0.0",
             "fileVersion": "1.600.22.20503"
+          }
+        }
+      },
+      "Backblaze.Agent/1.0.1": {
+        "dependencies": {
+          "Backblaze.Client": "1.0.1",
+          "Microsoft.Extensions.Http": "3.1.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Backblaze.Agent.dll": {
+            "assemblyVersion": "1.0.0.259",
+            "fileVersion": "1.0.0.259"
+          }
+        }
+      },
+      "Backblaze.Client/1.0.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0",
+          "Newtonsoft.Json": "13.0.2",
+          "Polly": "7.2.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Backblaze.Client.dll": {
+            "assemblyVersion": "1.0.0.259",
+            "fileVersion": "1.0.0.259"
           }
         }
       },
@@ -958,7 +1021,7 @@
           "Microsoft.CodeAnalysis.VisualBasic.Features": "4.0.0",
           "Microsoft.CodeAnalysis.VisualBasic.Workspaces": "4.0.0",
           "Microsoft.CodeAnalysis.Workspaces.MSBuild": "4.0.0",
-          "Newtonsoft.Json": "13.0.1",
+          "Newtonsoft.Json": "13.0.2",
           "NuGet.Packaging": "6.3.1",
           "NuGet.ProjectModel": "6.3.1",
           "System.Collections.Immutable": "6.0.0",
@@ -1123,6 +1186,13 @@
             "assemblyVersion": "6.0.0.0",
             "fileVersion": "6.0.1523.12404"
           }
+        }
+      },
+      "Microsoft.Extensions.Http/3.1.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "7.0.0",
+          "Microsoft.Extensions.Logging": "7.0.0",
+          "Microsoft.Extensions.Options": "7.0.0"
         }
       },
       "Microsoft.Extensions.Identity.Core/6.0.15": {
@@ -1351,7 +1421,7 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "7.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "6.0.13",
-          "Newtonsoft.Json": "13.0.1",
+          "Newtonsoft.Json": "13.0.2",
           "NuGet.Packaging": "6.3.1",
           "System.Configuration.ConfigurationManager": "6.0.0",
           "System.Private.Uri": "4.3.2",
@@ -1419,7 +1489,7 @@
           "Microsoft.Build": "17.3.2",
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "4.0.0",
           "Microsoft.DotNet.Scaffolding.Shared": "6.0.13",
-          "Newtonsoft.Json": "13.0.1",
+          "Newtonsoft.Json": "13.0.2",
           "NuGet.Packaging": "6.3.1",
           "System.Configuration.ConfigurationManager": "6.0.0",
           "System.Private.Uri": "4.3.2",
@@ -1536,11 +1606,11 @@
           "System.Xml.XDocument": "4.3.0"
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.2": {
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.1.25517"
+            "fileVersion": "13.0.2.27524"
           }
         }
       },
@@ -1602,7 +1672,7 @@
       },
       "NuGet.Packaging/6.3.1": {
         "dependencies": {
-          "Newtonsoft.Json": "13.0.1",
+          "Newtonsoft.Json": "13.0.2",
           "NuGet.Configuration": "6.3.1",
           "NuGet.Versioning": "6.3.1",
           "System.Security.Cryptography.Cng": "5.0.0",
@@ -1642,6 +1712,14 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {
             "assemblyVersion": "6.3.1.1",
             "fileVersion": "6.3.1.1"
+          }
+        }
+      },
+      "Polly/7.2.2": {
+        "runtime": {
+          "lib/netstandard2.0/Polly.dll": {
+            "assemblyVersion": "7.0.0.0",
+            "fileVersion": "7.2.2.0"
           }
         }
       },
@@ -2609,6 +2687,27 @@
       "serviceable": false,
       "sha512": ""
     },
+    "AWSSDK.Core/3.7.106.28": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XQzrj6CcdJodjsIy4a/U1cLdrS97ekL33b+C3KRAWPYpe9J8ELLXSuVTyYk/wphJ2fk+rjoE0e5RIOsXvrLmog==",
+      "path": "awssdk.core/3.7.106.28",
+      "hashPath": "awssdk.core.3.7.106.28.nupkg.sha512"
+    },
+    "AWSSDK.Extensions.NETCore.Setup/3.7.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2R3HvO3wsbIlsPYG4l116CF6NJ5XwMwjXoiFRCw07GgJONH5p2YR8pvtlqnmzowfUnveVYhQVFDB+OiLisWw7w==",
+      "path": "awssdk.extensions.netcore.setup/3.7.6",
+      "hashPath": "awssdk.extensions.netcore.setup.3.7.6.nupkg.sha512"
+    },
+    "AWSSDK.S3/3.7.104.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6cho/Nad9d7WZ0+FhQPkCnN4oFwtgUU/6PeC00OEaDFrYDCmlGq1Gq0JvAzoL6bJeaAY9bjzBHAoG+xVkO1wDg==",
+      "path": "awssdk.s3/3.7.104.6",
+      "hashPath": "awssdk.s3.3.7.104.6.nupkg.sha512"
+    },
     "Azure.Core/1.24.0": {
       "type": "package",
       "serviceable": true,
@@ -2622,6 +2721,20 @@
       "sha512": "sha512-EycyMsb6rD2PK9P0SyibFfEhvWWttdrYhyPF4f41uzdB/44yQlV+2Wehxyg489Rj6gbPvSPgbKq0xsHJBhipZA==",
       "path": "azure.identity/1.6.0",
       "hashPath": "azure.identity.1.6.0.nupkg.sha512"
+    },
+    "Backblaze.Agent/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pzRUJQRLcEOy5eDpNoIhuPs0rgHmG9kpKXIRJ23KFKbuk8hKIfmMoym8h6IetZhsu79cP1xjZMlmxqV9NU9ntw==",
+      "path": "backblaze.agent/1.0.1",
+      "hashPath": "backblaze.agent.1.0.1.nupkg.sha512"
+    },
+    "Backblaze.Client/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6p15tl5rXv7ZLNaEbUwkZOR5LGabtsM5yPkbjNvnI2AT2MvaNLys5HnYGjLu+zePSOrzHn8neIl8tV1kyYr49A==",
+      "path": "backblaze.client/1.0.1",
+      "hashPath": "backblaze.client.1.0.1.nupkg.sha512"
     },
     "Humanizer.Core/2.14.1": {
       "type": "package",
@@ -2966,6 +3079,13 @@
       "path": "microsoft.extensions.fileproviders.embedded/6.0.15",
       "hashPath": "microsoft.extensions.fileproviders.embedded.6.0.15.nupkg.sha512"
     },
+    "Microsoft.Extensions.Http/3.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DLigdcV0nYaT6/ly0rnfP80BnXq8NNd/h8/SkfY39uio7Bd9LauVntp6RcRh1Kj23N+uf80GgL7Win6P3BCtoQ==",
+      "path": "microsoft.extensions.http/3.1.0",
+      "hashPath": "microsoft.extensions.http.3.1.0.nupkg.sha512"
+    },
     "Microsoft.Extensions.Identity.Core/6.0.15": {
       "type": "package",
       "serviceable": true,
@@ -3190,12 +3310,12 @@
       "path": "netstandard.library/1.6.1",
       "hashPath": "netstandard.library.1.6.1.nupkg.sha512"
     },
-    "Newtonsoft.Json/13.0.1": {
+    "Newtonsoft.Json/13.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
-      "path": "newtonsoft.json/13.0.1",
-      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+      "sha512": "sha512-R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "path": "newtonsoft.json/13.0.2",
+      "hashPath": "newtonsoft.json.13.0.2.nupkg.sha512"
     },
     "NuGet.Common/6.3.1": {
       "type": "package",
@@ -3259,6 +3379,13 @@
       "sha512": "sha512-T/igBDLXCd+pH3YTWgGVNvYSOwbwaT30NyyM9ONjvlHlmaUjKBJpr9kH0AeL+Ado4EJsBhU3qxXVc6lyrpRcMw==",
       "path": "nuget.versioning/6.3.1",
       "hashPath": "nuget.versioning.6.3.1.nupkg.sha512"
+    },
+    "Polly/7.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-E6CeKyS513j7taKAq4q2MESDBvzuzWnR1rQ2Y2zqJvpiVtKMm699Aubb20MUPBDmb0Ov8PmcLHTCVFdCjoy2kA==",
+      "path": "polly/7.2.2",
+      "hashPath": "polly.7.2.2.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",

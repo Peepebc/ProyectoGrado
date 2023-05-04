@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using Bytewizer.Backblaze.Client;
 
 namespace ProyectoGrado.Controllers
 {
@@ -26,6 +27,8 @@ namespace ProyectoGrado.Controllers
         public string nombre { get; set; }
         public string apellidos { get; set; }
         public DateTime fechaNac { get; set; }
+        public IFormFile Imagen { get; set; }
+
     }
 
 
@@ -36,6 +39,7 @@ namespace ProyectoGrado.Controllers
 
         private readonly PeliculasContext _peliculasContext;
         private readonly IConfiguration _config;
+        private static IStorageClient _storage;
         private Usuario user;
 
         public UsuariosController(PeliculasContext peliculasContext,IConfiguration config)
@@ -48,7 +52,7 @@ namespace ProyectoGrado.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public dynamic RegisterUsuario(RegisterModel r)
+        public async Task<dynamic> RegisterUsuario([FromForm] RegisterModel r)
         {
             if (_peliculasContext.Usuarios.Where(e => e.User == r.usuario).Count() > 0) return "El usuario ya existe";
 
@@ -62,6 +66,10 @@ namespace ProyectoGrado.Controllers
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
 
+            _storage = new BackblazeClient();
+            _storage.Connect("f8203b393185", "005b131b73818cbe375cc17c0d51253c2a1412d068");
+            var result = await _storage.UploadAsync("ffd80230f30bc39983710815", "Pfps/" + r.usuario+".jpg", r.Imagen.OpenReadStream());
+
             Usuario u = new Usuario();
 
             u.Nombre = r.nombre;
@@ -72,7 +80,7 @@ namespace ProyectoGrado.Controllers
             u.FechaNac = r.fechaNac;
             u.Rol = 0;
             u.Apellidos = r.apellidos;
-            u.Imagen = "default.jpg";
+            u.Imagen = "https://moviebox-pelis.s3.us-east-005.backblazeb2.com/Pfps/" + r.usuario+".jpg"; ;
 
             _peliculasContext.Usuarios.Add(u);
             _peliculasContext.SaveChanges();
@@ -85,7 +93,7 @@ namespace ProyectoGrado.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<string>> LoginUsuario(LoginModel l)
+        public async Task<ActionResult<dynamic>> LoginUsuario(LoginModel l)
         {
 
             var u = await _peliculasContext.Usuarios.Where(e => e.User == l.usuario).FirstOrDefaultAsync();
@@ -109,7 +117,10 @@ namespace ProyectoGrado.Controllers
             if (u.PasswordHash.Equals(hashed))
             {
                 string token = CreateToken(u);
-                return Ok(token);
+                return new { 
+                    success= true,
+                    id = u.Id,
+                    jwt = token };
             }
 
             return BadRequest("Login fail");

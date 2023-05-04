@@ -1,6 +1,11 @@
 import Link from "next/link";
+import LayoutNoNav from "../components/LayoutNoNav";
 
-export default function forgotPassword(){
+ForgotPassword.getLayout = function(page) {
+    return <LayoutNoNav>{page}</LayoutNoNav>;
+  };
+
+export default function ForgotPassword({data}){
     return (
         <div>
             <img src="" alt="" />

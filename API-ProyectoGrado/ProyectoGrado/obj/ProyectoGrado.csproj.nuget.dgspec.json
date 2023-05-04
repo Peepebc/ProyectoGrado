@@ -40,6 +40,22 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "AWSSDK.Extensions.NETCore.Setup": {
+              "target": "Package",
+              "version": "[3.7.6, )"
+            },
+            "AWSSDK.S3": {
+              "target": "Package",
+              "version": "[3.7.104.6, )"
+            },
+            "Backblaze.Agent": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "Backblaze.Client": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[6.0.4, )"

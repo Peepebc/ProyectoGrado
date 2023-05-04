@@ -7,6 +7,7 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using Amazon.S3;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 
+builder.Services.AddBackblazeAgent(options =>
+{
+    options.KeyId = "f8203b393185";
+    options.ApplicationKey = "00503fc9f9875b1b39e988c30a63c8a6708e9f6bfa";
+});
+
 builder.Services.AddDbContext<PeliculasContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnection"));
@@ -63,7 +70,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();;
 
 app.UseAuthorization();

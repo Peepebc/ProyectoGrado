@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Bytewizer.Backblaze.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProyectoGrado.Models;
@@ -6,12 +7,25 @@ using ProyectoGrado.Models;
 namespace ProyectoGrado.Controllers
 {
 
+    public class PeliculaForm
+    {
+        public string Titulo { get; set; }
+        public DateTime Fecha { get; set; }
+        public string? Director { get; set; }
+        public string? Descripcion { get; set; }
+        public IFormFile Imagen { get; set; }
+        public string? Generos { get; set; }
+        public float? Puntuacion { get; set; }
+}
+
     [Route("Peliculas")]
     [ApiController]
     public class PeliculasController : ControllerBase
     {
 
         private readonly PeliculasContext _peliculasContext;
+        private static IStorageClient _storage;
+
 
         public PeliculasController(PeliculasContext peliculasContext)
         {
@@ -75,10 +89,24 @@ namespace ProyectoGrado.Controllers
 
         [HttpPost]
         [Route("AnadirPelicula")]
-        [Authorize(Roles = "1")]
-        public dynamic AnadirPelicula(Pelicula p)
+        public async Task<dynamic> AnadirPelicula([FromForm] PeliculaForm p)
         {
-            _peliculasContext.Peliculas.Add(p);
+
+            _storage = new BackblazeClient();
+            _storage.Connect("f8203b393185", "005b131b73818cbe375cc17c0d51253c2a1412d068");
+            var result = await _storage.UploadAsync("ffd80230f30bc39983710815","Peliculas/"+ p.Titulo + "-" + p.Fecha+".jpg", p.Imagen.OpenReadStream());
+            
+            Pelicula peli = new Pelicula();
+
+            peli.Titulo = p.Titulo;
+            peli.Fecha = p.Fecha;
+            peli.Director = p.Director;
+            peli.Descripcion = p.Descripcion;
+            peli.Puntuacion = p.Puntuacion;
+            peli.Generos = p.Generos;
+            peli.Imagen = "https://moviebox-pelis.s3.us-east-005.backblazeb2.com/Peliculas/" + p.Titulo+"-"+p.Fecha + ".jpg";
+
+            _peliculasContext.Peliculas.Add(peli);
             _peliculasContext.SaveChanges();
             return new
             {
