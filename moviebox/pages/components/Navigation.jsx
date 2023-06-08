@@ -5,16 +5,31 @@ import { useContext, useEffect, useState } from "react";
 import Context from '../Context.js';
 import { CiUser, CiSearch } from 'react-icons/ci';
 
+
 export default function Navigation(){
 
-    const {user} = useContext(Context)
+    const {user,setUser} = useContext(Context)
     const [isOpen,setIsOpen] = useState(false)
 
+
+    useEffect(() => {
+      if(sessionStorage.getItem("jwt")){
+        fetch("http://localhost:5086/Usuarios/Validame",{
+            method: 'GET',
+            headers: { 'Content-type': 'application/json', 'Authorization': 'Bearer ' + sessionStorage.getItem("jwt") },
+            credentials: 'same-origin'
+        }).then(res => res.json()).then(datos => {
+          console.log(datos)
+            setUser(datos)
+        })
+      }
+    }, []);
+
     return (
-<nav className="flex items-center justify-between flex-wrap md:flex-nowrap p-6 ">
+<nav className="flex items-center justify-between flex-wrap md:flex-nowrap p-6">
      <div className="flex items-center flex-shrink-0 text-white mr-6">
       <Link href={'/'}>
-       <Image src={logo} height={50} alt="Logo" />
+       <Image src={logo} height={70} className='object-fill' alt="Logo" />
       </Link> 
      </div>
      <div className="block md:hidden">
@@ -41,20 +56,28 @@ export default function Navigation(){
      <div
        className={`block md:flex md:items-center w-auto ${isOpen ? "block" : "hidden"}`}
      >
-       <div className="flex text-sm flex-col md:flex-row md:items-center">
-         <Link href={'/peliculas'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4">
-           PELICULAS
-         </Link>
-         <Link href={'/listas'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4">
-           LISTAS
-         </Link>
-         <Link href={'/usuarios'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4">
-           USUARIOS
-         </Link>
-         <div className='flex flex-col md:flex-row gap-3 order-first md:order-last md:w-full'>
-            <div className="relative flex order-last md:order-first items-center rounded-3xl border border-white overflow-hidden">
+       <div className="flex text-sm flex-col md:flex-row md:items-center gap-3">
+        {user && user.rol && user.rol==1 ?
+          <Link href={'/nuevaPelicula'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4 hover:border-b">
+           AÑADIR PELICULA
+          </Link>
+          :null}
+          <Link href={'/peliculas'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4 hover:border-b">
+            PELICULAS
+          </Link>
+          <Link href={'/resenas'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4 hover:border-b">
+            RESEÑAS
+          </Link>
+          <Link href={'/listas'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4 hover:border-b">
+            LISTAS
+          </Link>
+          <Link href={'/usuarios'} className="block mt-4 md:inline-block  md:mt-0 text-white-200 mr-4 hover:border-b">
+            USUARIOS
+          </Link>
+         <div className='flex flex-col md:flex-row gap-3 md:w-80'>
+            <div className="relative flex order-last md:order-first items-center rounded-3xl border border-white overflow-hidden ">
                 <input
-                className="bg-transparent p-2 w-72 focus:outline-none"
+                className="bg-transparent p-2 w-72 focus:outline-none focus:p-3 duration-200"
                 type="text"
                 id="search"
                 placeholder="Search..." /> 
@@ -62,8 +85,8 @@ export default function Navigation(){
                     <CiSearch className='text-2xl'/>
                 </div>
             </div>
-         {user ? <Link href={`/perfil/${user.id}`}><img src={user.imagen} className='object-cover inline-flex rounded-full w-9 h-9' alt="logo"/></Link> : <Link href={'/login'}><CiUser className='inline-flex text-4xl'/></Link>}    
         </div>
+        {user ? <Link href={`/perfil/${user.id}`}><img src={user.imagen} className='inline-flex rounded-full w-12' alt="logo"/></Link> : <Link href={'/login'}><CiUser className='inline-flex text-4xl'/></Link>}    
        </div>
        <div>
 

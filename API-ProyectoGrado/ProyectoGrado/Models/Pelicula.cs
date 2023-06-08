@@ -10,7 +10,7 @@ namespace ProyectoGrado.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string? Titulo { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
         public string? Director { get; set; }
         public string? Descripcion { get; set; }
         public string? Imagen { get; set; }

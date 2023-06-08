@@ -28,27 +28,27 @@ namespace ProyectoGrado.Controllers
 
         [HttpPost]
         [Route("AnadirPeliculaLista")]
-        public async Task<ActionResult<string>> AnadirFavorito(ContieneLista p)
+        public dynamic AnadirPeliculaLista(ContieneLista p)
         {
 
             Contiene c = new Contiene();
             c.IdPelicula = p.IdPelicula;
             c.IdLista = p.IdLista;
-            await _peliculasContext.Contiene.AddAsync(c);
+            _peliculasContext.Contiene.Add(c);
             _peliculasContext.SaveChanges();
-            return "Pelicula agregada correctamente";
+            return new {succes =true};
 
         }
 
         [HttpDelete]
-        [Route("AnadirPeliculaLista")]
-        public async Task<ActionResult<string>> EliminarFavorito(ContieneLista p)
+        [Route("EliminarPeliculaLista")]
+        public dynamic EliminarPeliculaLista(ContieneLista p)
         {
-            var contiene = await _peliculasContext.Contiene.Where(e => e.IdPelicula == p.IdPelicula && e.IdLista == p.IdLista).FirstOrDefaultAsync();
+            var contiene =  _peliculasContext.Contiene.Where(e => e.IdPelicula == p.IdPelicula && e.IdLista == p.IdLista).FirstOrDefault();
             if (contiene == null) return "Error";
             _peliculasContext.Remove<Contiene>(contiene);
             _peliculasContext.SaveChanges();
-            return "Favorito eliminado";
+            return new { succes = true };
         }
     }
 }

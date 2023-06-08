@@ -23,16 +23,16 @@ namespace ProyectoGrado.Controllers
         [Route("CrearLista")]
         [Authorize]
 
-        public async Task<ActionResult<string>> CrearLista([FromBody] string nombre)
+        public dynamic CrearLista([FromBody] string nombre)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Lista l = new Lista();
             l.Nombre = nombre; 
             l.IdUsuario = userId;
-            await _peliculasContext.Listas.AddAsync(l);
+            _peliculasContext.Listas.Add(l);
             _peliculasContext.SaveChanges();
-            return "Lista agregada correctamente";
+            return new { success = true };
 
         }
 
@@ -40,21 +40,35 @@ namespace ProyectoGrado.Controllers
         [Route("EliminarLista/{id}")]
         [Authorize]
 
-        public async Task<ActionResult<string>> EliminarLista(int id)
+        public dynamic EliminarLista(int id)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var lista = await _peliculasContext.Listas.Where(e => e.Id == id && e.IdUsuario == userId).FirstOrDefaultAsync();
+            var lista = _peliculasContext.Listas.Where(e => e.Id == id && e.IdUsuario == userId).FirstOrDefault();
             if (lista == null) return "Error";
             _peliculasContext.Remove<Lista>(lista);
             _peliculasContext.SaveChanges();
-            return "Lista eliminada";
+            return new { success = true };
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("UltimasListasUsuario/{id}")]
         public  dynamic UltimasListasUsuario(int id)
         {
-            return  _peliculasContext.Listas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(l=>new { l.Id, l.Nombre,l.Peliculas.Count,poster=l.Peliculas.Select(l=>l.Pelicula.Imagen).Take(3)}).Take(4).ToList();
+            return  _peliculasContext.Listas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(l=>new { l.Id, user = l.IdUsuario, l.Nombre,l.Peliculas.Count,poster=l.Peliculas.Select(l=>l.Pelicula.Imagen).Take(3)}).Take(4).ToList();
+        }
+
+        [HttpGet]
+        [Route("UltimasListas")]
+        public dynamic UltimasListas()
+        {
+            return _peliculasContext.Listas.Where(l=>l.Peliculas.Count()>0).OrderByDescending(r => r.Id).Select(l => new { l.Id, user=l.IdUsuario, l.Nombre, l.Peliculas.Count, poster = l.Peliculas.Select(l => l.Pelicula.Imagen).Take(3) }).Take(4).ToList();
+        }
+
+        [HttpGet]
+        [Route("TodasListas")]
+        public dynamic TodasListas()
+        {
+            return _peliculasContext.Listas.Where(l => l.Peliculas.Count() > 0).OrderByDescending(r => r.Id).Select(l => new { l.Id, user = l.IdUsuario, l.Nombre, l.Peliculas.Count, poster = l.Peliculas.Select(l => l.Pelicula.Imagen).Take(3) }).ToList();
         }
 
 
@@ -62,7 +76,7 @@ namespace ProyectoGrado.Controllers
         [Route("TodasListasUsuario/{id}")]
         public dynamic TodasListasUsuario(int id)
         {
-            return  _peliculasContext.Listas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(l => new { l.Id, l.Nombre, l.Peliculas.Count, poster = l.Peliculas.Select(l => l.Pelicula.Imagen).Take(3) }).ToList();
+            return  _peliculasContext.Listas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(l => new { l.Id, user = l.IdUsuario, l.Nombre, l.Peliculas.Count, poster = l.Peliculas.Select(l => l.Pelicula.Imagen).Take(3) }).ToList();
         }
     }
 }

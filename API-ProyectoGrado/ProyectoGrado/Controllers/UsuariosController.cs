@@ -48,13 +48,20 @@ namespace ProyectoGrado.Controllers
             _config = config;
         }
 
-         
+        [HttpGet]
+        [Route("TodosUsuarios")]
+
+        public dynamic TodosUsuarios()
+        {
+            return _peliculasContext.Usuarios.Select(p => new { p.Id, p.Imagen,p.User}).OrderByDescending(p => p.Id).Take(50).ToList();
+        }
 
         [HttpPost]
         [Route("Register")]
         public async Task<dynamic> RegisterUsuario([FromForm] RegisterModel r)
         {
-            if (_peliculasContext.Usuarios.Where(e => e.User == r.usuario).Count() > 0) return "El usuario ya existe";
+            if (_peliculasContext.Usuarios.Where(e => e.User == r.usuario).Count() > 0) return new {    error = "El usuario ya existe" };
+            if (_peliculasContext.Usuarios.Where(e => e.Email == r.email).Count() > 0) return new {    error = "El correo ya esta en uso" };
 
             byte[] salt = RandomNumberGenerator.GetBytes(128 / 8); // divide by 8 to convert bits to bytes
 
@@ -100,7 +107,7 @@ namespace ProyectoGrado.Controllers
 
             if (u == null)
             {
-                return BadRequest("Login fail");
+                return new { error= "Usuario o contraseña incorrectos" };
 
             }
 
@@ -123,7 +130,7 @@ namespace ProyectoGrado.Controllers
                     jwt = token };
             }
 
-            return BadRequest("Login fail");
+            return new { error = "Usuario o contraseña incorrectos" };
         }
 
         [HttpGet]
@@ -143,6 +150,13 @@ namespace ProyectoGrado.Controllers
             };
         }
 
+        [HttpGet]
+        [Route("DatosUsuario/{id}")]
+        public dynamic DatosUsuario(int id)
+        {
+            return _peliculasContext.Usuarios.Where(u => u.Id == id).Select(r => new { r.User, r.Imagen }).FirstOrDefault();
+        }
+
         private string CreateToken(Usuario usuario) 
         {
             List<Claim> claims = new List<Claim>
@@ -160,7 +174,7 @@ namespace ProyectoGrado.Controllers
                 signingCredentials: cred
                 );
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);  
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
         }

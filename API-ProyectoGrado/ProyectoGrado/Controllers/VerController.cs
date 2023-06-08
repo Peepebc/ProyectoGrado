@@ -20,9 +20,9 @@ namespace ProyectoGrado.Controllers
             _peliculasContext = peliculasContext;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("AnadirVer/{id}")]
-        public async Task<ActionResult<string>> AnadirVer(int id)
+        public async Task<ActionResult<dynamic>> AnadirVer(int id)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             Ver v = new Ver();
@@ -30,19 +30,28 @@ namespace ProyectoGrado.Controllers
             v.IdUsuario = userId;
             await _peliculasContext.Vistas.AddAsync(v);
             _peliculasContext.SaveChanges();
-            return "Vista agregado correctamente";
+            return new { mensaje = "Vista agregado correctamente" };
         }
 
         [HttpDelete]
         [Route("EliminarVer/{id}")]
-        public async Task<ActionResult<string>> EliminarVer(int id)
+        public async Task<ActionResult<dynamic>> EliminarVer(int id)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var ver = await _peliculasContext.Vistas.Where(e => e.IdPelicula == id && e.IdUsuario == userId).FirstOrDefaultAsync();
             if (ver == null) return "Error";
             _peliculasContext.Remove<Ver>(ver);
             _peliculasContext.SaveChanges();
-            return "Vista eliminado";
+            return new { mensaje = "Vista eliminado" };
+        }
+
+        [HttpGet]
+        [Route("isWatched/{id}")]
+        public async Task<ActionResult<bool>> IsWatched(int id)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return _peliculasContext.Vistas.Any(f => f.IdPelicula == id && f.IdUsuario == userId);
+
         }
     }
 }

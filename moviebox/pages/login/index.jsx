@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form";
 import { useCookies } from "react-cookie";
 import { useRouter  } from 'next/router';
 import LayoutNoNav from "../components/LayoutNoNav";
+import { parseCookies } from "@/helpers";
+import { useEffect, useState } from "react";
+
 
 Login.getLayout = function(page) {
     return <LayoutNoNav>{page}</LayoutNoNav>;
@@ -14,22 +17,30 @@ Login.getLayout = function(page) {
 export default function Login(){
 
 const { register, handleSubmit} = useForm();
-const [cookies, setCookie, removeCookie] = useCookies([])
 const router = useRouter();
+const [cookies,setCookies,removeCookies] = useCookies()
+const [mensaje,setMensaje] = useState("")
+async function onSubmit (datos) {
+    var login 
 
-async function onSubmit (data) {
-    const login = await fetch('/api/Usuarios/Login', {
-        method: 'POST',
-        headers: { 'Content-type': 'application/json'},
-        body: JSON.stringify(data),
-    }).then(res => res.json()).then(data => {return data})
-
+    try{
+        login = await fetch('http://localhost:5086/Usuarios/Login', {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json'},
+            body: JSON.stringify(datos),
+        }).then(res => res.json()).then(data => {return data})
+    }catch(error){
+        console.log(error)
+    }
     
     if(login.success) {
-        setCookie("jwt",login.jwt)
+        setCookies('jwt',login.jwt,{ path: '/' })
+        sessionStorage.setItem("jwt",login.jwt)
         router.push(`/perfil/${login.id}`);
+    }else{
+        setMensaje(login.error)
+    }
 }
-};
 
     return (
         <>
@@ -43,12 +54,13 @@ async function onSubmit (data) {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex flex-col py-3">
                             <label  htmlFor="user">Usuario</label>
-                            <input {...register('usuario')} className="focus:outline-none rounded-lg border border-gray-100 bg-transparent p-2"  type="text"/>
+                            <input {...register('usuario')} required className="focus:outline-none rounded-lg border border-gray-100 bg-transparent p-2"  type="text"/>
                         </div>
                         <div className="flex flex-col py-3">
                             <label  htmlFor="pass">Contraseña</label>
-                            <input {...register('password')} className="focus:outline-none rounded-lg border border-gray-100 bg-transparent p-2"  type="password"/>
+                            <input {...register('password')} required className="focus:outline-none rounded-lg border border-gray-100 bg-transparent p-2"  type="password"/>
                         </div>
+                        {mensaje && <div className="bg-red-400 p-3 text-center text-black rounded-lg">{mensaje}</div>}
                         <div className="flex py-4 gap-2">
                             <input className="w-5 rounded-xl"  type="checkbox" name="remember" id="remember"/>
                             <label htmlFor="pass">Recuerdame</label>

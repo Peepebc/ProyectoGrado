@@ -20,9 +20,9 @@ namespace ProyectoGrado.Controllers
             _peliculasContext = peliculasContext;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("AnadirFav/{id}")]
-        public async Task<ActionResult<string>> AnadirFavorito(int id)
+        public async Task<ActionResult<dynamic>> AnadirFavorito(int id)
         {
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
@@ -31,20 +31,29 @@ namespace ProyectoGrado.Controllers
             f.IdUsuario = userId;
             await _peliculasContext.Favoritos.AddAsync(f);
             _peliculasContext.SaveChanges();
-            return "Favorito agregado correctamente";
+            return new { mensaje = "Favorito agregado correctamente" };
 
         }
 
         [HttpDelete]
         [Route("EliminarFav/{id}")]
-        public async Task<ActionResult<string>> EliminarFavorito(int id)
+        public async Task<ActionResult<dynamic>> EliminarFavorito(int id)
         {
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var fav = await _peliculasContext.Favoritos.Where(e => e.IdPelicula == id && e.IdUsuario == userId).FirstOrDefaultAsync();
             if (fav == null) return "Error";
             _peliculasContext.Remove<Fav>(fav);
             _peliculasContext.SaveChanges();
-            return "Favorito eliminado";
+            return new { mensaje="Favorito eliminado" };
+        }
+
+        [HttpGet]
+        [Route("isFav/{id}")]
+        public async Task<ActionResult<bool>> IsFav(int id)
+        {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            return _peliculasContext.Favoritos.Any(f => f.IdPelicula == id && f.IdUsuario == userId);
+
         }
     }
 }

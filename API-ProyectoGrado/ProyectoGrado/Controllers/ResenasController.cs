@@ -8,6 +8,12 @@ using System.Security.Claims;
 namespace ProyectoGrado.Controllers
 {
 
+    public class NuevaResena
+    {
+        public string descripcion { get; set; } 
+        public float valoracion { get; set; } 
+    }
+
     [Route("Resenas")]
     [ApiController]
     public class ResenasController : ControllerBase
@@ -23,12 +29,21 @@ namespace ProyectoGrado.Controllers
         [HttpPost]
         [Route("AnadirResena/{id}")]
         [Authorize]
-        public dynamic AnadirResena(int id, [FromBody] Resena resena)
+        public dynamic AnadirResena(int id, [FromBody] NuevaResena resena)
         {
+            
+            var cantidad = _peliculasContext.Resenas.Where(r=>r.IdPelicula == id).Count()+1;
+            var total = _peliculasContext.Resenas.Where(r => r.IdPelicula == id).Sum(r => r.Valoracion) + resena.valoracion;
+
+            float nuevaValoracion = total / cantidad;
+
+            Pelicula p = _peliculasContext.Peliculas.Where(p=>p.Id==id).First();
+            p.Puntuacion=nuevaValoracion;
+
             Resena r = new Resena();
             r.IdPelicula = id;
-            r.Descripcion = resena.Descripcion;
-            r.Valoracion = resena.Valoracion;
+            r.Descripcion = resena.descripcion;
+            r.Valoracion = resena.valoracion;
             r.IdUsuario = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             _peliculasContext.Resenas.Add(r);
             _peliculasContext.SaveChanges();
@@ -39,8 +54,8 @@ namespace ProyectoGrado.Controllers
 
         }
 
-        [HttpPost]
-        [Route("/{id}")]
+        [HttpGet]
+        [Route("{id}")]
 
         public  dynamic ResenasPelicula(int id)
         {
@@ -52,15 +67,15 @@ namespace ProyectoGrado.Controllers
 
         public  dynamic UltimasResenas()
         {
-            return  _peliculasContext.Resenas.OrderByDescending(r=> r.Id).Select(r => new { r.IdUsuario, r.Usuario.User, r.Usuario.Imagen, r.Valoracion, r.Descripcion, r.IdPelicula, Poster=r.Pelicula.Imagen }).Take(10).ToList();
+            return  _peliculasContext.Resenas.OrderByDescending(r=> r.Id).Select(r => new { r.IdUsuario, r.Usuario.User, r.Usuario.Imagen, r.Valoracion, r.Descripcion, r.IdPelicula, Poster=r.Pelicula.Imagen }).Take(4).ToList();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("UltimasResenasUsuario/{id}")]
 
         public  dynamic UltimasResenasUsuario(int id)
         {
-            return  _peliculasContext.Resenas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(r => new {r.Valoracion, r.Descripcion, r.Pelicula.Imagen, r.Pelicula.Titulo }).Take(4).ToList();
+            return  _peliculasContext.Resenas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(r => new {r.Valoracion, r.Descripcion, r.Pelicula.Imagen, r.Pelicula.Titulo, r.Pelicula.Id }).Take(4).ToList();
         }
 
         [HttpGet]
@@ -68,7 +83,15 @@ namespace ProyectoGrado.Controllers
 
         public  dynamic TodasResenasUsuario(int id)
         {
-            return  _peliculasContext.Resenas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(r => new { r.Valoracion, r.Descripcion, r.Pelicula.Imagen, r.Pelicula.Titulo }).ToList();
+            return  _peliculasContext.Resenas.Where(x => x.IdUsuario == id).OrderByDescending(r => r.Id).Select(r => new { r.Valoracion, r.Descripcion, r.Pelicula.Imagen, r.Pelicula.Titulo, r.Pelicula.Id }).ToList();
+        }
+
+        [HttpGet]
+        [Route("TodasResenas")]
+
+        public dynamic TodasResenas()
+        {
+            return _peliculasContext.Resenas.OrderByDescending(r => r.Id).Select(r => new { r.IdUsuario, r.Usuario.User, r.Usuario.Imagen, r.Valoracion, r.Descripcion, r.IdPelicula, Poster = r.Pelicula.Imagen }).ToList();
         }
 
     }

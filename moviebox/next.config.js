@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  skipTrailingSlashRedirect: true,
   async rewrites() {
     return [
       {

@@ -9,11 +9,11 @@ namespace ProyectoGrado.Controllers
 
     public class PeliculaForm
     {
-        public string Titulo { get; set; }
-        public DateTime Fecha { get; set; }
+        public string? Titulo { get; set; }
+        public DateTime? Fecha { get; set; }
         public string? Director { get; set; }
         public string? Descripcion { get; set; }
-        public IFormFile Imagen { get; set; }
+        public IFormFile? Imagen { get; set; }
         public string? Generos { get; set; }
         public float? Puntuacion { get; set; }
 }
@@ -40,7 +40,15 @@ namespace ProyectoGrado.Controllers
             return  _peliculasContext.Peliculas.Select(p => new { p.Id, p.Imagen }).OrderByDescending(p => p.Id).Take(7).ToList();
         }
 
-        [HttpPost]
+        [HttpGet]
+        [Route("TodasPeliculas")]
+
+        public dynamic TodasPeliculas()
+        {
+            return _peliculasContext.Peliculas.Select(p => new { p.Id, p.Imagen, p.Titulo }).OrderByDescending(p => p.Id).Take(50).ToList();
+        }
+
+        [HttpGet]
         [Route("UltimasVistasUsuario/{id}")]
 
         public dynamic UltimasPeliculasVistas(int id)
@@ -51,7 +59,7 @@ namespace ProyectoGrado.Controllers
         //TODO TODAS LAS VISTAS DEL USUARIO
 
         [HttpGet]
-        [Route("TodasistasUsuario/{id}")]
+        [Route("TodasVistasUsuario/{id}")]
 
         public dynamic TodasistasUsuario(int id)
         {
@@ -59,7 +67,7 @@ namespace ProyectoGrado.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         [Route("UltimasFavoritasUsuario/{id}")]
 
         public dynamic UltimasPeliculasFavoritas(int id)
@@ -78,13 +86,15 @@ namespace ProyectoGrado.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
 
         public dynamic Pelicula(int id)
         {
             var pelicula =  _peliculasContext.Peliculas.Where(p => p.Id == id).FirstOrDefault();
+            int reviews = _peliculasContext.Resenas.Where(r => r.IdPelicula == id).Count();
+            float puntuacion = _peliculasContext.Resenas.Where(r => r.IdPelicula == id).Sum(r => r.Valoracion);
             if (pelicula == null) return Ok(false);
-            return pelicula;
+            return new{ pelicula,reviews,puntuacion};
         }
 
         [HttpPost]
@@ -131,5 +141,19 @@ namespace ProyectoGrado.Controllers
 
         }
         //TODO TODAS LAS PELICULAS DE UNA LISTA
+
+        [HttpGet]
+        [Route("TodasPeliculasLista/{id}")]
+
+        public dynamic TodasPeliculasLista(int id)
+        {
+            string titulo = _peliculasContext.Listas.Where(l=> l.Id==id).Select(l=> l.Nombre).FirstOrDefault();
+            var peliculas =  _peliculasContext.Peliculas.Join(_peliculasContext.Contiene, p => p.Id, f => f.IdPelicula, (p, f) => new { p, f }).Where(x => x.f.IdLista == id).OrderByDescending(pel => pel.f.Id).Select(pel => new { pel.p.Id, pel.p.Imagen }).ToList();
+            return new
+            {
+                titulo,
+                incluye = peliculas
+            };
+        }
     }
 }
