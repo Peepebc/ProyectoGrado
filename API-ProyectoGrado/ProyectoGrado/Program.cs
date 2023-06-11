@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Amazon.S3;
 using ProyectoGrado.Services;
+using Microsoft.Extensions.Options;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -62,10 +63,23 @@ builder.Services.AddBackblazeAgent(options =>
     options.ApplicationKey = "00503fc9f9875b1b39e988c30a63c8a6708e9f6bfa";
 });
 
-builder.Services.AddDbContext<PeliculasContext>(options =>
+
+if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnection"));
-});
+    builder.Services.AddDbContext<PeliculasContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnectionProd"));
+    });
+}
+else
+{
+    builder.Services.AddDbContext<PeliculasContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnection"));
+    });
+}
+
+builder.Services.BuildServiceProvider().GetService<PeliculasContext>().Database.Migrate();
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 

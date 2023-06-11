@@ -44,7 +44,8 @@ namespace ProyectoGrado.Migrations
                     Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FechaNac = table.Column<DateTime>(type: "date", nullable: false),
                     Imagen = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rol = table.Column<int>(type: "int", nullable: false)
+                    Rol = table.Column<int>(type: "int", nullable: false),
+                    ResetPassword = table.Column<int>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,8 +1,0 @@
-{
-"SpaProxyServer": {
-"ServerUrl": "https://localhost:44461",
-"LaunchCommand": "npm start",
-"WorkingDirectory": "D:\\Proyecto\\ProyectoGrado\\ClientApp\\",
-"MaxTimeoutInSeconds": "120"
-}
-}
