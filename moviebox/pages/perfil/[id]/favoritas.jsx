@@ -52,12 +52,6 @@ export default function Favoritas() {
             >
               LOGOUT
             </button>
-            <button
-              type="submit"
-              className="text-sm md:text-lg md:w-36 rounded-lg p-2 bg-gray-100 text-black"
-            >
-              EDITAR PERFIL
-            </button>
           </div>
         ) : null}
       </section>
@@ -83,6 +77,7 @@ export default function Favoritas() {
                 })}
           </div>
           <div>
+          {/* 
             {isLoading ? (
               <CircularProgress />
             ) : (
@@ -93,6 +88,7 @@ export default function Favoritas() {
                 +
               </button>
             )}
+             */}
           </div>
         </div>
       </section>

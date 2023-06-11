@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProyectoGrado.Models;
+using System.Linq;
 
 namespace ProyectoGrado.Controllers
 {
 
     public class PeliculaForm
     {
+        public int? Id { get; set; }
         public string? Titulo { get; set; }
         public DateTime? Fecha { get; set; }
         public string? Director { get; set; }
@@ -46,6 +48,14 @@ namespace ProyectoGrado.Controllers
         public dynamic TodasPeliculas()
         {
             return _peliculasContext.Peliculas.Select(p => new { p.Id, p.Imagen, p.Titulo }).OrderByDescending(p => p.Id).Take(50).ToList();
+        }
+
+        [HttpGet]
+        [Route("PeliculasNoLista/{id}")]
+
+        public dynamic PeliculasNoLista(int id)
+        {
+            return _peliculasContext.Peliculas.Join(_peliculasContext.Contiene, p => p.Id, v => v.IdPelicula, (p, v) => new { p, v }).Where(x=>x.v.IdLista==id).Select(p => new { p.p.Id, p.p.Imagen, p.p.Titulo }).ToList();
         }
 
         [HttpGet]
@@ -101,22 +111,31 @@ namespace ProyectoGrado.Controllers
         [Route("AnadirPelicula")]
         public async Task<dynamic> AnadirPelicula([FromForm] PeliculaForm p)
         {
-
-            _storage = new BackblazeClient();
-            _storage.Connect("f8203b393185", "005b131b73818cbe375cc17c0d51253c2a1412d068");
-            var result = await _storage.UploadAsync("ffd80230f30bc39983710815","Peliculas/"+ p.Titulo + "-" + p.Fecha+".jpg", p.Imagen.OpenReadStream());
-            
             Pelicula peli = new Pelicula();
+
+            if (p.Id != null) {
+                peli = _peliculasContext.Peliculas.Where(peli => peli.Id == p.Id).FirstOrDefault();
+            }
+
+            if (p.Imagen != null)
+            {
+                _storage = new BackblazeClient();
+                _storage.Connect("f8203b393185", "005b131b73818cbe375cc17c0d51253c2a1412d068");
+                var result = await _storage.UploadAsync("ffd80230f30bc39983710815", "Peliculas/" + p.Titulo + "-" + p.Fecha + ".jpg", p.Imagen.OpenReadStream());
+                peli.Imagen = "https://moviebox-pelis.s3.us-east-005.backblazeb2.com/Peliculas/" + p.Titulo + "-" + p.Fecha + ".jpg";
+            }
 
             peli.Titulo = p.Titulo;
             peli.Fecha = p.Fecha;
             peli.Director = p.Director;
             peli.Descripcion = p.Descripcion;
-            peli.Puntuacion = p.Puntuacion;
+            if(p.Puntuacion != 0)
+            {
+                peli.Puntuacion = p.Puntuacion/10;
+            }else peli.Puntuacion = p.Puntuacion;
             peli.Generos = p.Generos;
-            peli.Imagen = "https://moviebox-pelis.s3.us-east-005.backblazeb2.com/Peliculas/" + p.Titulo+"-"+p.Fecha + ".jpg";
 
-            _peliculasContext.Peliculas.Add(peli);
+            if (p.Id == null)  _peliculasContext.Peliculas.Add(peli);
             _peliculasContext.SaveChanges();
             return new
             {

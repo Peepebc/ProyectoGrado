@@ -907,3 +907,8 @@ D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\AWSSDK.S3.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\Backblaze.Agent.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\Backblaze.Client.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\Polly.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\BouncyCastle.Cryptography.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\MailKit.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\MimeKit.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll

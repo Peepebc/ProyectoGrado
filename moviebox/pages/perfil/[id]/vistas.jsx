@@ -40,9 +40,6 @@ export default function Vistas(){
                 <button onClick={logOut} type="submit" className="text-sm md:text-lg md:w-36 rounded-lg p-2 bg-gray-100 text-black">
                     LOGOUT
                 </button>
-                <button type="submit" className="text-sm md:text-lg md:w-36 rounded-lg p-2 bg-gray-100 text-black">
-                    EDITAR PERFIL
-                </button>
               </div>
               :null}
             </section>
@@ -58,11 +55,11 @@ export default function Vistas(){
                   return(<Link href={`/pelicula/${pelicula.id}`}><img className='w-32 h-36 md:w-52 md:h-80 rounded-xl' src={pelicula.imagen} alt="" /></Link>)
                 }) }
                 </div>
-                <div>
+                {/* <div>
                     <button className="transition duration-300 w-16 h-16 rounded-full border font-extrabold text-green-800 hover:bg-green-800 hover:text-blue-950 border-green-800 text-center" > 
                     +
                     </button>
-                </div>
+                </div> */}
             </div>
         </section>
       </>

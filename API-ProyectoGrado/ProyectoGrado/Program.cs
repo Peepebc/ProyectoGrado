@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using Amazon.S3;
+using ProyectoGrado.Services;
 
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -65,6 +66,8 @@ builder.Services.AddDbContext<PeliculasContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnection"));
 });
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 

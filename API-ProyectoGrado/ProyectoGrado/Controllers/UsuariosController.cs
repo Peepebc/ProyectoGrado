@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProyectoGrado.Models;
+using ProyectoGrado.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -30,6 +31,13 @@ namespace ProyectoGrado.Controllers
         public IFormFile Imagen { get; set; }
 
     }
+    public class NuevaContrasenaModal
+    {
+        public string nuevaContrasena { get; set; }
+        public long codigo { get; set; }
+
+
+    }
 
 
     [Route("Usuarios")]
@@ -40,12 +48,14 @@ namespace ProyectoGrado.Controllers
         private readonly PeliculasContext _peliculasContext;
         private readonly IConfiguration _config;
         private static IStorageClient _storage;
+        private readonly IEmailService _emailService;
         private Usuario user;
 
-        public UsuariosController(PeliculasContext peliculasContext,IConfiguration config)
+        public UsuariosController(PeliculasContext peliculasContext,IConfiguration config, IEmailService emailService)
         {
             _peliculasContext = peliculasContext;
             _config = config;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -86,6 +96,7 @@ namespace ProyectoGrado.Controllers
             u.Email = r.email;
             u.FechaNac = r.fechaNac;
             u.Rol = 0;
+            u.ResetPassword = 0;
             u.Apellidos = r.apellidos;
             u.Imagen = "https://moviebox-pelis.s3.us-east-005.backblazeb2.com/Pfps/" + r.usuario+".jpg"; ;
 
@@ -155,6 +166,54 @@ namespace ProyectoGrado.Controllers
         public dynamic DatosUsuario(int id)
         {
             return _peliculasContext.Usuarios.Where(u => u.Id == id).Select(r => new { r.User, r.Imagen }).FirstOrDefault();
+        }
+
+        [HttpPost]
+        [Route("OlvidarContraseña")]
+        public dynamic OlvidarContraseña([FromBody]  string email)
+        {
+            if (_peliculasContext.Usuarios.Where(e => e.Email == email).Count() > 0) {
+            var usuario = _peliculasContext.Usuarios.Where(u => u.Email == email).FirstOrDefault();
+            var codigo = new Random();
+            long codigoReset = codigo.NextInt64();
+            usuario.ResetPassword = codigoReset;
+            _peliculasContext.SaveChanges();
+            _emailService.SendEmail(new EmailDTO { Para = email, Codigo = codigoReset });
+                return new { success = true };
+            }
+            else
+            {
+                return new { error = "El correo no existe" };
+
+            }
+        }
+        [HttpPost]
+        [Route("CambiarContraseña")]
+        public dynamic CambiarContraseña(NuevaContrasenaModal r)
+        {
+            if(r.codigo == 0 ) return new { error = "Se ha producido un error" };
+            if (_peliculasContext.Usuarios.Where(e => e.ResetPassword == r.codigo).Count() > 0)
+            {
+                var usuario = _peliculasContext.Usuarios.Where(u => u.ResetPassword == r.codigo).FirstOrDefault();
+
+                byte[] salt = Convert.FromBase64String(usuario.PasswordSalt);
+
+                string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                    password: r.nuevaContrasena!,
+                    salt: salt,
+                    prf: KeyDerivationPrf.HMACSHA256,
+                    iterationCount: 100000,
+                    numBytesRequested: 256 / 8));
+                usuario.PasswordHash = hashed;
+                usuario.ResetPassword = 0;
+                _peliculasContext.SaveChanges();
+                return new { success = true };
+            }
+            else
+            {
+                return new { error = "Se ha producido un error" };
+
+            }
         }
 
         private string CreateToken(Usuario usuario) 

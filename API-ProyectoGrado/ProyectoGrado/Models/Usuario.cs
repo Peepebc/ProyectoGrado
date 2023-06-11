@@ -20,6 +20,8 @@ namespace ProyectoGrado.Models
         public DateTime FechaNac { get; set; }
         public string? Imagen { get; set; }
         public int Rol { get; set; }
+        public long ResetPassword { get; set; }
+
 
         //Relaciones 
 

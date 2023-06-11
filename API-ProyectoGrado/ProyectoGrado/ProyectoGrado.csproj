@@ -11,6 +11,7 @@
     <PackageReference Include="AWSSDK.S3" Version="3.7.104.6" />
     <PackageReference Include="Backblaze.Agent" Version="1.0.1" />
     <PackageReference Include="Backblaze.Client" Version="1.0.1" />
+    <PackageReference Include="MailKit" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
