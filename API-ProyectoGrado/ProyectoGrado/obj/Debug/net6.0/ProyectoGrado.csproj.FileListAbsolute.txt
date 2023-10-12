@@ -912,3 +912,5 @@ D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\MailKit.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\MimeKit.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\System.Security.Cryptography.Pkcs.dll
 D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.Pkcs.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\Npgsql.dll
+D:\ProyectoGrado\API-ProyectoGrado\ProyectoGrado\bin\Debug\net6.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

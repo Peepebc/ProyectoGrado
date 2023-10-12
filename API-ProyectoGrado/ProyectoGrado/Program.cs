@@ -68,14 +68,14 @@ if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"
 {
     builder.Services.AddDbContext<PeliculasContext>(options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnectionProd"));
+        options.UseNpgsql(builder.Configuration.GetConnectionString("PeliculasConnectionProd"));
     });
 }
 else
 {
     builder.Services.AddDbContext<PeliculasContext>(options =>
     {
-        options.UseSqlServer(builder.Configuration.GetConnectionString("PeliculasConnection"));
+        options.UseNpgsql(builder.Configuration.GetConnectionString("PeliculasConnection"));
     });
 }
 
@@ -92,12 +92,10 @@ using (var scope = app.Services.CreateScope())
     
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 app.UseCors(MyAllowSpecificOrigins);
 //app.UseHttpsRedirection();

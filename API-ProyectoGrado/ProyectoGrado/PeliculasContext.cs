@@ -6,10 +6,17 @@ namespace ProyectoGrado
     public class PeliculasContext : DbContext
     {
 
-        public PeliculasContext(DbContextOptions<PeliculasContext> options) 
-             :base (options)
+        protected readonly IConfiguration Configuration;
+
+        public PeliculasContext(IConfiguration configuration)
         {
-            
+            Configuration = configuration;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            // connect to postgres with connection string from app settings
+            options.UseNpgsql(Configuration.GetConnectionString("PeliculasConnection"));
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
@@ -20,15 +27,6 @@ namespace ProyectoGrado
         public DbSet<Ver> Vistas { get; set; }
         public DbSet<Resena> Resenas { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Usuario>().ToTable("Usuario");
-            modelBuilder.Entity<Pelicula>().ToTable("Pelicula");
-            modelBuilder.Entity<Lista>().ToTable("Lista");
-            modelBuilder.Entity<Contiene>().ToTable("Contiene");
-            modelBuilder.Entity<Fav>().ToTable("Fav");
-            modelBuilder.Entity<Ver>().ToTable("Ver");
-            modelBuilder.Entity<Resena>().ToTable("Resena");
-        }
+
     }
 }

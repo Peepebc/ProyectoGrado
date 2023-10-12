@@ -27,5 +27,25 @@
       "applicationUrl": "http://localhost:41899",
       "sslPort": 44348
     }
+  },
+  "Email": {
+    "Host": "smtp.gmail.com",
+    "Port": "587",
+    "UserName": "jbujcab03@iesmarquesdecomares.org",
+    "Password": "eolyxcghmjczbgth"
+  },
+  "AppSettings": {
+    "Token": "TokenSecretoJWTPepe"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "PeliculasConnection": "Host=ep-flat-truth-41084946.eu-central-1.aws.neon.fl0.io; Database=MovieBox; Username=fl0user; Password=D4wtxRYOH2JS",
+    "PeliculasConnectionProd": "Host=ep-flat-truth-41084946.eu-central-1.aws.neon.fl0.io; Database=MovieBox; Username=fl0user; Password=D4wtxRYOH2JS"
   }
 }
